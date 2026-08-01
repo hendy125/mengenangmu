@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Sebuah Senja yang Pernah Kita Punya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Literata:ital,wght@0,300;0,400;0,500;1,400&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dusk-deep:   #241C34;
+    --dusk-mid:    #4B3358;
+    --dusk-warm:   #C9704F;
+    --dusk-glow:   #EFA36B;
+    --paper:       #F6EEDF;
+    --paper-shadow:#00000030;
+    --ink:         #2E2438;
+    --ink-soft:    #6B5E76;
+    --mist:        #E7DCEF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%);
+    background-attachment: fixed;
+    font-family:'Literata', serif;
+    color: var(--mist);
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- Envelope intro ---------- */
+  #envelope-screen{
+    position:fixed; inset:0; z-index:50;
+    background: radial-gradient(circle at 50% 40%, #4B3358 0%, #241C34 70%);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  #envelope-screen.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .envelope{
+    width:220px; height:150px; position:relative; cursor:pointer;
+    filter: drop-shadow(0 10px 25px #00000060);
+  }
+  .env-body{
+    position:absolute; inset:0;
+    background: var(--paper);
+    border-radius:4px;
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    clip-path: polygon(0 0, 50% 55%, 100% 0);
+    background: #E2D3B8;
+    transform-origin: top;
+    transition: transform 0.9s cubic-bezier(.65,0,.35,1);
+  }
+  .envelope.open .env-flap{ transform: rotateX(180deg); }
+  .env-seal{
+    position:absolute; top:38%; left:50%; transform:translate(-50%,-50%);
+    width:34px; height:34px; border-radius:50%;
+    background: var(--dusk-warm);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Caveat', cursive; color:#fff; font-size:20px;
+    transition: opacity .4s ease;
+  }
+  .envelope.open .env-seal{ opacity:0; }
+  #envelope-screen p{
+    margin-top: 28px; font-family:'Caveat', cursive; font-size: 22px; color: var(--mist);
+    letter-spacing:0.5px;
+  }
+
+  /* ---------- Sun / horizon signature ---------- */
+  #sun{
+    position:fixed; left:50%; top:18vh; width:120px; height:120px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, #FFE3B0 0%, var(--dusk-glow) 60%, transparent 75%);
+    border-radius:50%;
+    z-index:-1; opacity:0.9;
+    transition: top 0.05s linear, opacity 0.3s;
+  }
+
+  main{ position:relative; z-index:1; max-width: 720px; margin:0 auto; padding: 0 24px 120px; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height: 92vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center; padding-top: 40px;
+  }
+  .eyebrow{
+    font-family:'Caveat', cursive; font-size: 22px; color: var(--mist); opacity:.85; margin-bottom:6px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:500; font-style:italic;
+    font-size: clamp(32px, 6vw, 54px); line-height:1.15; margin: 0 0 18px;
+    color:#FFF7EC;
+  }
+  .hint{
+    font-size: 13px; color: var(--mist); opacity:.55; margin-top: 30px; font-style:italic;
+  }
+  .scroll-cue{
+    margin-top: 50px; font-size:12px; letter-spacing:3px; text-transform:uppercase; opacity:.6;
+    animation: bob 2.4s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* ---------- Letter section ---------- */
+  section{ margin: 70px 0; }
+  .letter{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 3px;
+    padding: 46px 40px;
+    box-shadow: 0 25px 60px var(--paper-shadow), 0 2px 0 #ffffff60 inset;
+    position:relative;
+    transform: rotate(-0.6deg);
+  }
+  .letter::before{
+    content:"";
+    position:absolute; top:14px; right:18px; width:46px; height:46px;
+    background: var(--dusk-warm); opacity:.15; border-radius:50%;
+  }
+  .letter p{
+    font-size: 17px; line-height:1.85; margin: 0 0 18px; color: var(--ink);
+  }
+  .signoff{
+    font-family:'Caveat', cursive; font-size: 24px; color: var(--ink-soft);
+    text-align:right; margin-top: 26px;
+  }
+
+  /* ---------- Photo section ---------- */
+  .section-title{
+    font-family:'Fraunces', serif; font-style:italic; font-weight:500;
+    font-size: clamp(24px,4vw,32px); text-align:center; margin-bottom: 8px; color:#FFF7EC;
+  }
+  .section-sub{
+    text-align:center; font-size:14px; color: var(--mist); opacity:.7; margin-bottom: 44px;
+  }
+  .gallery{
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 34px 24px;
+  }
+  @media(max-width:560px){ .gallery{ grid-template-columns: 1fr; } }
+
+  .polaroid{
+    background: var(--paper);
+    padding: 14px 14px 46px;
+    box-shadow: 0 18px 34px #00000040;
+    position:relative;
+    transition: transform .25s ease;
+  }
+  .polaroid:nth-child(odd){ transform: rotate(-3deg); }
+  .polaroid:nth-child(even){ transform: rotate(2.5deg); }
+  .polaroid:hover{ transform: scale(1.04) rotate(0deg); z-index:2; }
+  .polaroid .frame{
+    width:100%; aspect-ratio: 1/1; background:#DDD3C7; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .polaroid .frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .polaroid figcaption{
+    font-family:'Caveat', cursive; font-size:19px; color: var(--ink-soft);
+    text-align:center; margin-top: 12px;
+  }
+  .tape{
+    position:absolute; top:-10px; left:50%; transform:translateX(-50%) rotate(-2deg);
+    width: 60px; height: 22px; background: #F3E9D2cc; box-shadow:0 2px 4px #00000020;
+  }
+
+  /* ---------- Closing ---------- */
+  .closing{
+    text-align:center; padding-top: 40px;
+  }
+  .closing p{ font-size:16px; line-height:1.9; color: var(--mist); max-width:520px; margin: 0 auto 10px; }
+  .closing .caveat{ font-family:'Caveat', cursive; font-size:26px; color:#FFF7EC; margin-top:20px; }
+  footer{ text-align:center; font-size:12px; opacity:.4; padding: 40px 0 10px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  /* ---------- Music player ---------- */
+  #music-player{
+    position:fixed; right:18px; bottom:18px; z-index:30;
+    background: var(--paper); color: var(--ink);
+    border-radius: 10px; box-shadow: 0 14px 30px #00000050;
+    width: 240px; overflow:hidden;
+    transform: rotate(-1deg);
+  }
+  #music-player .mp-label{
+    display:flex; align-items:center; gap:8px;
+    padding: 8px 10px 4px;
+    font-family:'Caveat', cursive; font-size: 17px; color: var(--ink-soft);
+  }
+  #music-player .mp-label .dot{
+    width:8px; height:8px; border-radius:50%; background: var(--dusk-warm); flex-shrink:0;
+  }
+  #music-player{ display:block; cursor:pointer; }
+  #music-player iframe{ display:block; width:100%; height:135px; border:0; }
+  #music-player .mp-fallback{
+    font-size: 11px; color: var(--ink-soft); opacity:.7; padding: 4px 10px 8px; text-align:center;
+  }
+  @media(max-width:560px){
+    #music-player{ width: 200px; right:12px; bottom:12px; }
+    #music-player iframe{ height: 112px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="envelope-screen">
+  <div class="envelope" id="envelope">
+    <div class="env-body"></div>
+    <div class="env-flap"></div>
+    <div class="env-seal">✦</div>
+  </div>
+  <p>ketuk amplopnya, pelan-pelan saja</p>
+</div>
+
+<div id="sun"></div>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">untuk seseorang yang pernah singgah</div>
+    <h1>Sebuah Senja yang<br>Pernah Kita Punya</h1>
+    <div class="scroll-cue">gulir ke bawah</div>
+  </section>
+
+  <section>
+    <div class="letter">
+      <p>Aku menulis ini bukan untuk membuka lagi apa yang sudah kita tutup — hanya untuk menyimpan apa yang pernah ada, di satu tempat yang rapi, sebelum benar-benar aku lupakan detailnya.</p>
+      <p>Kita pernah punya waktu. Waktu yang sekarang tinggal jadi cerita, disimpan di sudut kepala yang jarang aku buka. Aku tidak menulis ini untuk berharap kita kembali ke sana. Hanya ingin, sebentar saja, menaruh hal-hal yang dulu membuat hari-hari itu terasa hangat.</p>
+      <p>Terima kasih untuk setiap potongan waktu yang pernah kita habiskan bersama. Tidak semuanya harus berakhir jadi penyesalan. Beberapa hal cukup dikenang, lalu dibiarkan pergi — seperti senja, indah selagi ada, dan wajar saja ketika akhirnya gelap datang menggantikannya.</p>
+      <p>Semoga, di mana pun langkahmu sekarang, kamu baik-baik saja.</p>
+      <div class="signoff">— disimpan diam-diam, tanpa perlu dibalas</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Beberapa yang Sempat Terekam</div>
+    <div class="section-sub">kenangan yang sempat tersimpan</div>
+    <div class="gallery">
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <div class="frame"><img src="https://github.com/hendy125/mengenangmu/blob/main/WhatsApp%20Image%202026-08-01%20at%2011.01.42.jpeg?raw=true" alt="kenangan 1"></div>
+        <figcaption>mungkin waktu kita bersama singkat, tapi kenangan itu masih terus terlintas di setiap ingatan ku.</figcaption>
+      </figure>
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <div class="frame"><img src="https://github.com/hendy125/mengenangmu/blob/main/WhatsApp%20Image%202026-08-01%20at%2011.02.10.jpeg?raw=true" alt="kenangan 2"></div>
+        <figcaption>semoga kini kamu bahagia selalu walau sudah tak bersamaku, terimakasih telah membuatku merasa di cintai.</figcaption>
+      </figure>
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <div class="frame"><img src="https://github.com/hendy125/mengenangmu/blob/main/WhatsApp%20Image%202026-08-01%20at%2011.02.49.jpeg?raw=true" alt="kenangan 3"></div>
+        <figcaption>mungkin untukmu cintaku ini tak seberapa, tapi percayalah kamu adalah perempuan pertama yang membuat hatiku jatuh sedalam ini.</figcaption>
+      </figure>
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <div class="frame"><img src="https://github.com/hendy125/mengenangmu/blob/main/WhatsApp%20Image%202026-08-01%20at%2011.04.12.jpeg?raw=true" alt="kenangan 4"></div>
+        <figcaption>mungkin kita di takdirkan hanya untuk saling mengenal bukan untuk saling memiliki...</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="closing">
+    <p>Kotak ini akan tetap ada di sini, seandainya suatu saat aku ingin membukanya lagi. Tapi untuk sekarang, biarkan dulu waktu yang jalan.</p>
+    <div class="caveat">selamat tinggal, dengan baik-baik.</div>
+    <div class="caveat">Salam hangat from Hendy for Riska...</div>
+  </section>
+
+  <footer>
+    <p>dibuat dengan diam, disimpan dengan tenang</p>
+    <p>copyright/created by Dhyy_Tzyy</p>
+  </footer>
+</main>
+
+<div id="music-player">
+  <div class="mp-label"><span class="dot"></span>Mengenangmu — Kerispatih</div>
+  <audio id="bg-audio" src="mengenangmu.mp3" loop></audio>
+  <div class="mp-fallback" id="mp-status" style="padding:2px 10px 12px;">musik akan mulai saat amplop dibuka</div>
+</div>
+
+<script>
+  // Envelope open interaction — also starts music since this is a real user click
+  const env = document.getElementById('envelope');
+  const screen = document.getElementById('envelope-screen');
+  const audio = document.getElementById('bg-audio');
+  const mpStatus = document.getElementById('mp-status');
+  env.addEventListener('click', () => {
+    env.classList.add('open');
+    setTimeout(() => screen.classList.add('hide'), 700);
+    audio.play().then(() => {
+      mpStatus.textContent = 'sedang diputar \u2013 klik untuk jeda';
+    }).catch(() => {
+      mpStatus.textContent = 'klik di sini untuk memutar musik';
+    });
+  });
+  document.getElementById('music-player').addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      mpStatus.textContent = 'sedang diputar \u2013 klik untuk jeda';
+    } else {
+      audio.pause();
+      mpStatus.textContent = 'dijeda \u2013 klik untuk lanjut';
+    }
+  });
+
+  // Sun parallax tied to scroll (subtle)
+  const sun = document.getElementById('sun');
+  window.addEventListener('scroll', () => {
+    const max = document.body.scrollHeight - window.innerHeight;
+    const progress = Math.min(window.scrollY / max, 1);
+    sun.style.top = (18 + progress * 55) + 'vh';
+    sun.style.opacity = 0.9 - progress * 0.6;
+  });
+</script>
+
+</body>
+</html>
